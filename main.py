@@ -89,17 +89,13 @@ if __name__ == "__main__":
             game = Hexapawn([AI_Player(ai), AI_Player(ai)])
             game.play()
             print("player %d wins after %d turns " % (game.nopponent, game.nmove))
+            countingwin.append(game.nopponent)
+
             if i % 2 == 0:
                 game.nplayer = 1
             else:
                 game.nplayer = 2
 
-            if game.nopponent == 1:
-                countingwin.append(1)
-            else:
-                countingwin.append(2)
-
-    #print("Wins table: ", countingwin)
-
+    print("Wins table: ", countingwin)
     print("Player 1 won %d games." % countingwin.count(1))
     print("Player 2 won %d games." % countingwin.count(2))
