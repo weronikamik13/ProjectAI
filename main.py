@@ -1,6 +1,5 @@
 from easyAI import TwoPlayersGame
-from easyAI.Player import Human_Player
-
+from copy import deepcopy, copy
 import random
 
 # Convert D7 to (3,6) and back...
@@ -13,7 +12,6 @@ class Hexapawn(TwoPlayersGame):
     A nice game whose rules are explained here:
     http://fr.wikipedia.org/wiki/Hexapawn
     """
-    Hexapawn.nplayer =
 
     def __init__(self, players, size=(4, 4)):
         self.size = M, N = size
@@ -23,9 +21,11 @@ class Hexapawn(TwoPlayersGame):
             players[i].direction = d
             players[i].goal_line = goal
             players[i].pawns = pawns
+            players[i].starting_spaws = copy(pawns)
+            players[i].respawn_places = []
 
         self.players = players #Define the players
-        self.nplayer = 1#player 1 starts
+        self.nplayer = 1 #player 1 starts
 
 
 
@@ -48,8 +48,18 @@ class Hexapawn(TwoPlayersGame):
         move = list(map(to_tuple, move.split(' ')))
         ind = self.player.pawns.index(move[0])
         self.player.pawns[ind] = move[1]
+
         if move[1] in self.opponent.pawns:
+            self.opponent.respawn_places.append(self.opponent.starting_spaws[self.opponent.pawns.index(move[1])])
+            del self.opponent.starting_spaws[self.opponent.pawns.index(move[1])]
             self.opponent.pawns.remove(move[1])
+
+        if random.randrange(10) == 0 and len(self.player.respawn_places) > 0:
+            idx = random.randrange(len(self.player.respawn_places))
+            self.player.pawns.append(self.player.respawn_places[idx])
+            self.player.starting_spaws.append(copy(self.player.respawn_places[idx]))
+            del self.player.respawn_places[idx]
+
 
     def lose(self):
         return (any([i == self.opponent.goal_line
@@ -83,7 +93,13 @@ if __name__ == "__main__":
                 game.nplayer = 1
             else:
                 game.nplayer = 2
-            countingwin.append(game.nopponent)
+
+            if game.nopponent == 1:
+                countingwin.append(1)
+            else:
+                countingwin.append(2)
+
+    #print("Wins table: ", countingwin)
 
     print("Player 1 won %d games." % countingwin.count(1))
     print("Player 2 won %d games." % countingwin.count(2))
