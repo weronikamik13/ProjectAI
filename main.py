@@ -1,16 +1,19 @@
 from easyAI import TwoPlayersGame
+from easyAI.Player import Human_Player
+
+import random
 
 # Convert D7 to (3,6) and back...
 to_string = lambda move: " ".join(["ABCDEFGHIJ"[move[i][0]] + str(move[i][1] + 1)
                                    for i in (0, 1)])
 to_tuple = lambda s: ("ABCDEFGHIJ".index(s[0]), int(s[1:]) - 1)
 
-
 class Hexapawn(TwoPlayersGame):
     """
     A nice game whose rules are explained here:
     http://fr.wikipedia.org/wiki/Hexapawn
     """
+    Hexapawn.nplayer =
 
     def __init__(self, players, size=(4, 4)):
         self.size = M, N = size
@@ -21,8 +24,10 @@ class Hexapawn(TwoPlayersGame):
             players[i].goal_line = goal
             players[i].pawns = pawns
 
-        self.players = players
-        self.nplayer = 1
+        self.players = players #Define the players
+        self.nplayer = 1#player 1 starts
+
+
 
     def possible_moves(self):
         moves = []
@@ -38,11 +43,11 @@ class Hexapawn(TwoPlayersGame):
 
         return list(map(to_string, [(i, j) for i, j in moves]))
 
+
     def make_move(self, move):
         move = list(map(to_tuple, move.split(' ')))
         ind = self.player.pawns.index(move[0])
         self.player.pawns[ind] = move[1]
-
         if move[1] in self.opponent.pawns:
             self.opponent.pawns.remove(move[1])
 
@@ -61,12 +66,24 @@ class Hexapawn(TwoPlayersGame):
                                    for j in range(self.size[1])])
                          for i in range(self.size[0])]))
 
-
 if __name__ == "__main__":
     from easyAI import AI_Player, Human_Player, Negamax
 
-    scoring = lambda game: -100 if game.lose() else 0
-    ai = Negamax(10, scoring)
-    game = Hexapawn([AI_Player(ai), AI_Player(ai)])
-    game.play()
-    print("player %d wins after %d turns " % (game.nopponent, game.nmove))
+    countingwin = [];
+    times = [];
+
+    for i in range(random.randint(1,10)):
+            print("############### NEW TURN ############### %d" % (i + 1))
+            scoring = lambda game: -100 if game.lose() else 0
+            ai = Negamax(10, scoring)
+            game = Hexapawn([AI_Player(ai), AI_Player(ai)])
+            game.play()
+            print("player %d wins after %d turns " % (game.nopponent, game.nmove))
+            if i % 2 == 0:
+                game.nplayer = 1
+            else:
+                game.nplayer = 2
+            countingwin.append(game.nopponent)
+
+    print("Player 1 won %d games." % countingwin.count(1))
+    print("Player 2 won %d games." % countingwin.count(2))
