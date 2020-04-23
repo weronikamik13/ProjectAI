@@ -77,7 +77,7 @@ class Hexapawn(TwoPlayersGame):
                          for i in range(self.size[0])]))
 
 if __name__ == "__main__":
-    from easyAI import AI_Player, Human_Player, Negamax
+    from easyAI import AI_Player, Negamax
 
     countingwin = [];
     times = [];
