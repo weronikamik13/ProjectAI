@@ -86,7 +86,8 @@ if __name__ == "__main__":
             print("############### NEW TURN ############### %d" % (i + 1))
             scoring = lambda game: -100 if game.lose() else 0
             ai = Negamax(10, scoring)
-            game = Hexapawn([AI_Player(ai), AI_Player(ai)])
+            ai_algo = Negamax(4, scoring)
+            game = Hexapawn([AI_Player(ai), AI_Player(ai_algo)])
             game.play()
             print("player %d wins after %d turns " % (game.nopponent, game.nmove))
             countingwin.append(game.nopponent)
