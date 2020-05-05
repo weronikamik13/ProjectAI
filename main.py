@@ -25,7 +25,8 @@ class Hexapawn(TwoPlayersGame):
             players[i].respawn_places = []
 
         self.players = players #Define the players
-        self.nplayer = 1 #player 1 starts
+        starting_player = random.randint(1, 2)
+        self.nplayer = starting_player
 
 
 
@@ -91,11 +92,6 @@ if __name__ == "__main__":
             game.play()
             print("player %d wins after %d turns " % (game.nopponent, game.nmove))
             countingwin.append(game.nopponent)
-
-            if i % 2 == 0:
-                game.nplayer = 1
-            else:
-                game.nplayer = 2
 
     print("Wins table: ", countingwin)
     print("Player 1 won %d games." % countingwin.count(1))
